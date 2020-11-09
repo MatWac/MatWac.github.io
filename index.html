@@ -1,45 +1,26 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title/>WactionStudio : Une chaine hors norme</title>
-		
-		<style>
-		body{
-			background-color: rgb(243, 248, 76);
-			text-transform: 200px, 100 px;
-			text-align: center;
+npm install sqlite3;
+var sqlite3 = require('sqlite3');
+var db = new sqlite3.Database('sqlite02.db');
+
+db.serialize(function() {
+	db.run("create table if not exists log (date)");
+	db.all("select date from log", function(err, rows) {
+		if( rows.length == 0 )
+		{
+			console.log("Première exécution !");
+		}
+		else
+		{
+			for( var i in rows )
+			{
+				console.log(rows[i].date);
 			}
-		.title{
-			font-family : "Bernard MT Condensed", fantasy;
-			font-size : 30px;
-			}
-		.title2{
-			font-size : 20px;
-			font-color : red;
-			}
-			
-		p{
-			font-size : 15px;
-			}
-		.lien{
-			vertical-align: text-bottom;	
-			}
-	
-		</style>
-	</head>
-	<body>
-		<h1 class="title"> WactionStudio, la chaine Youtube qui cartonne</h1>
-		<img src="https://yt3.ggpht.com/a-/AOh14GhEMuirf1DFEinvv3Rc6psZOdAY-yeyWA3VGwc7Ag=s100-c-k-c0xffffffff-no-rj-mo" height="100px" width="100px">
-			<p>Depuis sa création en 2015, la chaîne Youtube des deux jeunes frères Wac grimpe en flèche avec des milliards de vues</p>
-		
-		<h2 class="title2"> La création</h2>
-			<p>Actif depuis le 4 juillet 2015, la chaîne publie sa <a target="-blank"href="https://www.youtube.com/watch?v=Ol-i2W7p37g"> première vidéo </a>la 16 mars 2017 et le succès est imédiat</p>
-			
-		<h2 class ="title2">Les individus</h2>
-			<p>Les deux beaux gosses à l'humour grandiose ont un parcours semé d'embuche.<br> Malgrès cela, ils ont réussi à grimper la montagne des 2 milliards d'abonnés, soit un tiers de la population mondiale.<br> En effet, leurs talents dépassent de loin l'entièreté de la Planète Terre et leurs qualité de montage et de tournage dépasse de loin l'immaginable</p>
-		<a class ="lien" target="_blank" href="https://www.youtube.com/channel/UCIAQ2RNIGKr4t1uqMo7EInw?view_as=subscriber">Youtube</a>
-	</body>
-	
-</html>
+		}
+	});
+
+	var date = new Date().toLocaleString();
+	var stmt = db.prepare("insert into log values (?)");
+	stmt.run(date);
+});
 
 
